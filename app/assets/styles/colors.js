@@ -7,6 +7,8 @@
 
 export default {
     COLOR_PRIMARY : '#ae3e90', //purple
+    COLOR_PRIMARY_DARK:"#8d2d73",
+    COLOR_PRIMARY_LIGHT:"#faade5",
     COLOR_PRIMARY_PINK : "#fc6c8f",
     COLOR_SECONDARY : "#111",
     SUCCESS_COLOR :"#5cb85c",
