@@ -10,6 +10,7 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 
 import Login from './app/screens/auth/Login';
+import Messages from './app/screens/Messages/Messages';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -21,7 +22,8 @@ const instructions = Platform.select({
 export default class App extends Component {
   render() {
     return (
-      <Login/>
+      // <Login/>
+      <Messages/>
     );
   }
 }

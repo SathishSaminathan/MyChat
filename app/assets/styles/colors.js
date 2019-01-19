@@ -12,6 +12,7 @@ export default {
     SUCCESS_COLOR :"#5cb85c",
     DANGER_COLOR : "#d9534f",
     PRIMARY_COLOR : "#2c3e50",
+    WHITE_COLOR:"#FAFAFA",
     SITE_GRAY1 : "#54575e",
     FONT_SMALL_SIZE:12,
     FONT_MEDIUM_SIZE:24,
