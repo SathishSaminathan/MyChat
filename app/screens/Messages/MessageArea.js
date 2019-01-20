@@ -6,14 +6,27 @@ const { width, height } = Dimensions.get("window");
 
 export default class MessageArea extends Component {
   constructor(props) {
+    console.log("constructor MessageArea", props.CurrentUser);
     super(props);
     this.state = {
-      MessageList: this.props.MessageList
+      MessageList: this.props.MessageList,
+      CurrentUser:this.props.CurrentUser
     };
   }
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    console.log("getDerivedStateFromProps MessageArea");
+    if(nextProps){
+      return{
+        MessageList:nextProps.MessageList 
+      }
+    }
+  }
+
   renderMessage = () =>
-    this.state.MessageList.map((message, i) => <Message MessageContent={message} key={i} />);
+    this.state.MessageList.map((message, i) => (
+      <Message CurrentUser={this.props.CurrentUser} MessageContent={message} key={i} />
+    ));
 
   render() {
     return (
@@ -29,6 +42,4 @@ export default class MessageArea extends Component {
   }
 }
 
-const styles = StyleSheet.create({
- 
-});
+const styles = StyleSheet.create({});

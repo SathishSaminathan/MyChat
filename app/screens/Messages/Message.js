@@ -6,12 +6,36 @@ import images from "../../assets/img/image";
 
 const { width, height } = Dimensions.get("window");
 
-const Message = ({ MessageContent }) => (
-  <View style={styles.messageContainer}>
-    <Image style={styles.profileImage} source={images.profileImage} />
+const Message = ({ MessageContent, CurrentUser }) => (
+  <View
+    style={[
+      styles.messageContainer,
+      {
+        flexDirection: `${
+          MessageContent.senderId === CurrentUser.uid ? "row-reverse" : "row"
+        }`
+      }
+    ]}
+  >
+    {MessageContent.senderId !== CurrentUser.uid && (
+      <Image
+        style={styles.profileImage}
+        source={{ uri: MessageContent.senderAvatar }}
+      />
+    )}
     <View style={styles.messageTextArea}>
-      <Text style={styles.messageAuthor}>Sathish Sachu</Text>
-      <Text style={styles.messageText}>{MessageContent.text}</Text>
+      {MessageContent.senderId !== CurrentUser.uid && (
+        <Text style={styles.messageAuthor}>{MessageContent.senderName}</Text>
+      )}
+      <Text
+        style={
+          MessageContent.senderId === CurrentUser.uid
+            ? styles.ownMessageText
+            : styles.messageText
+        }
+      >
+        {MessageContent.content}
+      </Text>
     </View>
   </View>
 );
@@ -31,10 +55,10 @@ const styles = StyleSheet.create({
   messageTextArea: {
     maxWidth: width - width / 3.5
   },
-  messageAuthor:{
-    textDecorationLine:"underline",
-    fontFamily: 'Roboto',
-    marginLeft: 10,
+  messageAuthor: {
+    textDecorationLine: "underline",
+    fontFamily: "Roboto",
+    marginLeft: 10
   },
   messageText: {
     backgroundColor: Colors.COLOR_PRIMARY,
@@ -42,6 +66,15 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     borderRadius: 10,
     padding: 5
+  },
+  ownMessageText: {
+    backgroundColor: Colors.WHITE_COLOR,
+    color: Colors.COLOR_PRIMARY,
+    marginLeft: 10,
+    borderRadius: 10,
+    padding: 5,
+    borderWidth: 1,
+    borderColor: Colors.COLOR_PRIMARY,
   }
 });
 
