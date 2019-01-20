@@ -15,17 +15,23 @@ import {
   statusCodes,
   GoogleSigninButton
 } from "react-native-google-signin";
-import firebase from 'react-native-firebase';
+import firebase from "react-native-firebase";
 
+import firebaseDb from "../../../firebase";
 import images from "../../assets/img/image";
 import Colors from "../../assets/styles/colors";
+import Loader from "../../components/Loader";
 
 const { width, height } = Dimensions.get("window");
 
 export default class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      userRef: firebaseDb.database().ref("users"),
+      currentUser: null,
+      Loader:false
+    };
   }
 
   componentWillMount() {
@@ -59,48 +65,46 @@ export default class Login extends Component {
           data.idToken,
           data.accessToken
         );
+        this.setState({
+          Loader:true
+        })
         // Login with the credential
         return firebase.auth().signInWithCredential(credential);
       })
       .then(currentUser => {
-        console.log(
-          `Google login with user : ${JSON.stringify(currentUser)}`
-        );
+        this.setState({
+          Loader:false
+        })
+        this.props.currentUser(currentUser);
+        console.log(`Google login with user : ${JSON.stringify(currentUser)}`);
+        this.saveUser(currentUser).then(() => {
+          console.log("User Saved");
+        });
       })
       .catch(err => {
         console.log("Login failed with error..", err);
       });
+  };
 
-    // signIn = async () => {
-    //   try {
-    //     await GoogleSignin.hasPlayServices();
-    //     const userInfo = await GoogleSignin.signIn();
-    //     this.setState({ userInfo });
-    //   } catch (error) {
-    //     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-    //       // user cancelled the login flow
-    //     } else if (error.code === statusCodes.IN_PROGRESS) {
-    //       // operation (f.e. sign in) is in progress already
-    //     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-    //       // play services not available or outdated
-    //     } else {
-    //       // some other error happened
-    //     }
-    //   }
-    // };
+  saveUser = createdUser => {
+    return this.state.userRef.child(createdUser.user.uid).set({
+      name: createdUser.user.displayName,
+      avatar: createdUser.user.photoURL,
+      email: createdUser.user.email
+    });
   };
 
   render() {
     return (
-      <ImageBackground
+      this.state.Loader?<Loader/>:<ImageBackground
         style={styles.container}
         source={images.backgroundImage}
         blurRadius={3}
       >
         <StatusBar
-          backgroundColor="transparent"
-          barStyle="dark-content"
-          translucent
+          backgroundColor={Colors.COLOR_PRIMARY}
+          barStyle="light-content"
+          // translucent
         />
         <View style={styles.logoArea}>
           <Image style={styles.logoImage} source={images.logoImg} />
@@ -117,13 +121,13 @@ export default class Login extends Component {
             </Text>
           </View>
         </TouchableOpacity>
-        <GoogleSigninButton
+        {/* <GoogleSigninButton
           style={{ width: 48, height: 48 }}
           size={GoogleSigninButton.Size.Icon}
           color={GoogleSigninButton.Color.Dark}
           onPress={this._signIn}
           disabled={this.state.isSigninInProgress}
-        />
+        /> */}
       </ImageBackground>
     );
   }
