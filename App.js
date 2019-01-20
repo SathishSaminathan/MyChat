@@ -8,10 +8,14 @@
 
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
+import firebase from 'react-native-firebase';
 
 import Login from './app/screens/auth/Login';
 import Messages from './app/screens/Messages/Messages';
 import Home from './app/screens/Home/Home';
+import Colors from "./app/assets/styles/colors";
+import LoggedIn from './app/screens/auth/LoggedIn';
+import LoggedOut from './app/screens/auth/LoggedOut';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -21,12 +25,38 @@ const instructions = Platform.select({
 });
 
 export default class App extends Component {
+  constructor () {
+    super()
+    this.state={
+      Loading:true
+    }
+  }
+
+  componentDidMount(){
+    this.authSubscription = firebase.auth().onAuthStateChanged((user)=>{
+      this.setState({
+        Loading:false,
+        user
+      })
+    })
+  }
+
+  componentWillUnmount(){
+    this.authSubscription();
+  }
+  
   render() {
-    return (
-      // <Login/>
-      // <Messages/>
-      <Home/>
-    );
+    // The application is initialising
+    if (this.state.loading) return <ActivityIndicator style={{ color:Colors.COLOR_PRIMARY}} animating size="large" />;
+    // The user exists, so they're logged in
+    if (this.state.user) return <LoggedIn />;
+    // The user is null, so they're logged out
+    return <LoggedOut />;
+    // return (
+    //   // <Login/>
+    //   // <Messages/>
+    //   <Home/>
+    // );
   }
 }
 
