@@ -34,6 +34,7 @@ export default class App extends Component {
 
   componentDidMount(){
     this.authSubscription = firebase.auth().onAuthStateChanged((user)=>{
+      debugger
       this.setState({
         Loading:false,
         user
@@ -49,9 +50,9 @@ export default class App extends Component {
     // The application is initialising
     if (this.state.loading) return <ActivityIndicator style={{ color:Colors.COLOR_PRIMARY}} animating size="large" />;
     // The user exists, so they're logged in
-    if (this.state.user) return <LoggedIn />;
+    if (this.state.user) return <Messages />;
     // The user is null, so they're logged out
-    return <LoggedOut />;
+    return <Login />;
     // return (
     //   // <Login/>
     //   // <Messages/>
