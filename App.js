@@ -7,13 +7,9 @@
  */
 
 import React, { Component } from "react";
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View
-} from "react-native";
+import { Platform, StyleSheet, Text, View } from "react-native";
 import firebase from "react-native-firebase";
+import SplashScreen from "react-native-splash-screen";
 
 import Login from "./app/screens/auth/Login";
 import Messages from "./app/screens/Messages/Messages";
@@ -40,12 +36,13 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    this.authSubscription = firebase.auth().onAuthStateChanged((user)=>{
+    SplashScreen.hide();
+    this.authSubscription = firebase.auth().onAuthStateChanged(user => {
       this.setState({
-        Loading:false,
+        Loading: false,
         user
-      })
-    })
+      });
+    });
   }
 
   componentWillUnmount() {
@@ -63,10 +60,7 @@ export default class App extends Component {
 
   render() {
     // The application is initialising
-    if (this.state.Loading)
-      return (
-        <Loader/>
-      );
+    if (this.state.Loading) return <Loader />;
     // The user exists, so they're logged in
     if (this.state.user)
       return <Messages CurrentUser={this.state.CurrentUser} />;
@@ -96,5 +90,5 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#333333",
     marginBottom: 5
-  },
+  }
 });
