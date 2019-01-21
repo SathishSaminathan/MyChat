@@ -97,7 +97,7 @@ export default class Login extends Component {
   render() {
     return (
       this.state.Loader?<Loader/>:<ImageBackground
-        style={styles.container}
+        style={[styles.container,{resizeMode:"contain"}]}
         source={images.backgroundImage}
         blurRadius={3}
       >
@@ -107,7 +107,7 @@ export default class Login extends Component {
           // translucent
         />
         <View style={styles.logoArea}>
-          <Image style={styles.logoImage} source={images.logoImg} />
+          <Image style={[styles.logoImage]} source={images.logoImg} />
           <Text style={styles.logoText}>WELCOME TO MY APP</Text>
         </View>
         <TouchableOpacity
@@ -142,14 +142,15 @@ const styles = StyleSheet.create({
   logoArea: {
     width: "100%",
     height: 400,
-    alignItems: "center"
+    alignItems: "center",
   },
   logoImage: {
     width: 200,
     height: 200,
     borderRadius: 50,
     borderWidth: 3,
-    borderColor: Colors.COLOR_PRIMARY
+    borderColor: Colors.COLOR_PRIMARY,
+    resizeMode:"cover"
   },
   logoText: {
     color: "white",
