@@ -8,6 +8,7 @@ import io.invertase.firebase.RNFirebasePackage;
 import co.apptailor.googlesignin.RNGoogleSigninPackage;
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.auth.RNFirebaseAuthPackage; // <-- For auth
+import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage; // <-- Push notification
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -33,7 +34,8 @@ public class MainApplication extends Application implements ReactApplication {
             new RNGoogleSigninPackage(),
             new RNFirebasePackage(),
             new VectorIconsPackage(),
-            new RNFirebaseAuthPackage() // <-- For auth
+            new RNFirebaseAuthPackage(), // <-- For auth            
+            new RNFirebaseNotificationsPackage() // <-- Push notification
       );
     }
 

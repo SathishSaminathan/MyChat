@@ -7,24 +7,16 @@
  */
 
 import React, { Component } from "react";
-import { Platform, StyleSheet, Text, View } from "react-native";
+import { Platform, StyleSheet, Text, View, Alert } from "react-native";
 import firebase from "react-native-firebase";
 import SplashScreen from "react-native-splash-screen";
 
 import Login from "./app/screens/auth/Login";
 import Messages from "./app/screens/Messages/Messages";
 import Home from "./app/screens/Home/Home";
-import Colors from "./app/assets/styles/colors";
 import LoggedIn from "./app/screens/auth/LoggedIn";
 import LoggedOut from "./app/screens/auth/LoggedOut";
 import Loader from "./app/components/Loader";
-
-const instructions = Platform.select({
-  ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
-  android:
-    "Double tap R on your keyboard to reload,\n" +
-    "Shake or press menu button for dev menu"
-});
 
 export default class App extends Component {
   constructor() {
@@ -36,6 +28,8 @@ export default class App extends Component {
   }
 
   componentDidMount() {
+    this.checkPermission();
+    this.createNotificationListeners();
     SplashScreen.hide();
     this.authSubscription = firebase.auth().onAuthStateChanged(user => {
       this.setState({
@@ -45,8 +39,85 @@ export default class App extends Component {
     });
   }
 
+  async checkPermission() {
+    const enabled = await firebase.messaging().hasPermission();
+    if (enabled) {
+        this.getToken();
+    } else {
+        this.requestPermission();
+    }
+  }
+
+  async requestPermission() {
+    try {
+        await firebase.messaging().requestPermission();
+        // User has authorised
+        this.getToken();
+    } catch (error) {
+        // User has rejected permissions
+        console.log('permission rejected');
+    }
+  }
+
+  async getToken() {
+    let fcmToken = await AsyncStorage.getItem('fcmToken', value);
+    if (!fcmToken) {
+        fcmToken = await firebase.messaging().getToken();
+        if (fcmToken) {
+            // user has a device token
+            await AsyncStorage.setItem('fcmToken', fcmToken);
+        }
+    }
+  }
+
+  async createNotificationListeners() {
+    /*
+    * Triggered when a particular notification has been received in foreground
+    * */
+    this.notificationListener = firebase.notifications().onNotification((notification) => {
+        const { title, body } = notification;
+        this.showAlert(title, body);
+    });
+  
+    /*
+    * If your app is in background, you can listen for when a notification is clicked / tapped / opened as follows:
+    * */
+    this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
+        const { title, body } = notificationOpen.notification;
+        this.showAlert(title, body);
+    });
+  
+    /*
+    * If your app is closed, you can check if it was opened by a notification being clicked / tapped / opened as follows:
+    * */
+    const notificationOpen = await firebase.notifications().getInitialNotification();
+    if (notificationOpen) {
+        const { title, body } = notificationOpen.notification;
+        this.showAlert(title, body);
+    }
+    /*
+    * Triggered for data only payload in foreground
+    * */
+    this.messageListener = firebase.messaging().onMessage((message) => {
+      //process data message
+      console.log(JSON.stringify(message));
+    });
+  }
+
+  showAlert(title, body) {
+    Alert.alert(
+      title, body,
+      [
+          { text: 'OK', onPress: () => console.log('OK Pressed') },
+      ],
+      { cancelable: false },
+    );
+  }
+
   componentWillUnmount() {
     this.authSubscription();
+    this.notificationListener();
+    this.notificationOpenedListener();
   }
 
   _currentUser = CurrentUser => {
