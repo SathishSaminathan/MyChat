@@ -11,6 +11,8 @@
       android:allowBackup="false"
       android:theme="@style/AppTheme">
 
+      <service android:name="io.invertase.firebase.messaging.RNFirebaseMessagingService"/>
+
       <activity
         android:name=".SplashActivity"
         android:theme="@style/SplashTheme"
