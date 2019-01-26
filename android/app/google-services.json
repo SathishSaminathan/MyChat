@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "136892080908",
+    "firebase_url": "https://mychat-90efa.firebaseio.com",
+    "project_id": "mychat-90efa",
+    "storage_bucket": "mychat-90efa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:136892080908:android:620004fa7b9bab6e",
+        "android_client_info": {
+          "package_name": "com.mychat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "136892080908-avo2mk2m7rbl1d1pegmoboifl6jlfa2i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAC8DmAnLxVkK-B_9LqG3PAksvO2uHMsD4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
