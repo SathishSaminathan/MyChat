@@ -16,6 +16,7 @@ import {
   GoogleSigninButton
 } from "react-native-google-signin";
 import firebase from "react-native-firebase";
+import DeviceInfo from "react-native-device-info";
 
 import firebaseDb from "../../../firebase";
 import images from "../../assets/img/image";
@@ -30,7 +31,7 @@ export default class Login extends Component {
     this.state = {
       userRef: firebaseDb.database().ref("users"),
       currentUser: null,
-      Loader:false
+      Loader: false
     };
   }
 
@@ -43,6 +44,19 @@ export default class Login extends Component {
   }
 
   componentDidMount() {
+    var language = DeviceInfo.getDeviceLocale();
+
+    _loadDeviceInfo = async deviceData => {
+      // load the data in 'local storage'.
+      // this value will be used by login and register components.
+      var value = JSON.stringify(deviceData);
+      try {
+        await AsyncStorage.setItem(config.DEVICE_STORAGE_KEY, value);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     GoogleSignin.hasPlayServices({
       autoResolve: true,
       showPlayServicesUpdateDialog: true
@@ -66,15 +80,15 @@ export default class Login extends Component {
           data.accessToken
         );
         this.setState({
-          Loader:true
-        })
+          Loader: true
+        });
         // Login with the credential
         return firebase.auth().signInWithCredential(credential);
       })
       .then(currentUser => {
         this.setState({
-          Loader:false
-        })
+          Loader: false
+        });
         this.props.currentUser(currentUser);
         console.log(`Google login with user : ${JSON.stringify(currentUser)}`);
         this.saveUser(currentUser).then(() => {
@@ -95,9 +109,11 @@ export default class Login extends Component {
   };
 
   render() {
-    return (
-      this.state.Loader?<Loader/>:<ImageBackground
-        style={[styles.container,{resizeMode:"contain"}]}
+    return this.state.Loader ? (
+      <Loader />
+    ) : (
+      <ImageBackground
+        style={[styles.container, { resizeMode: "contain" }]}
         source={images.backgroundImage}
         blurRadius={3}
       >
@@ -142,7 +158,7 @@ const styles = StyleSheet.create({
   logoArea: {
     width: "100%",
     height: 400,
-    alignItems: "center",
+    alignItems: "center"
   },
   logoImage: {
     width: 200,
@@ -150,7 +166,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderWidth: 3,
     borderColor: Colors.COLOR_PRIMARY,
-    resizeMode:"cover"
+    resizeMode: "cover"
   },
   logoText: {
     color: "white",
