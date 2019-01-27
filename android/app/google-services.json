@@ -36,6 +36,66 @@
           "status": 2
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:136892080908:android:1b746fabb5d079d6",
+        "android_client_info": {
+          "package_name": "com.sktech.mychat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "136892080908-meqv33kn8u947asbb08hpjtvjbv69rvk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sktech.mychat",
+            "certificate_hash": "85f671ff0310b8045d22ba0061b8e8d494a2c6ca"
+          }
+        },
+        {
+          "client_id": "136892080908-rv350uj833q17nnb2vg5b96ftoo2oi67.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sktech.mychat",
+            "certificate_hash": "649148252f34201ad792bd2d7845615aa95efdeb"
+          }
+        },
+        {
+          "client_id": "136892080908-t3hc0v8mqnc6s87kepjrhg5a126b5168.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sktech.mychat",
+            "certificate_hash": "e08f36b0052eae62856d8a92cb20f26f3b883206"
+          }
+        },
+        {
+          "client_id": "136892080908-avo2mk2m7rbl1d1pegmoboifl6jlfa2i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAC8DmAnLxVkK-B_9LqG3PAksvO2uHMsD4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "136892080908-avo2mk2m7rbl1d1pegmoboifl6jlfa2i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
     }
   ],
   "configuration_version": "1"

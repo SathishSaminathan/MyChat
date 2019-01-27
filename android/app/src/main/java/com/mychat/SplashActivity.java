@@ -1,4 +1,4 @@
-package com.mychat;
+package com.sktech.mychat;
 
 import android.content.Intent;
 import android.os.Bundle;
