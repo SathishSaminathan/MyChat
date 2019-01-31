@@ -30,14 +30,18 @@ export default class App extends Component {
   componentDidMount() {
     SplashScreen.hide();
     this.authSubscription = firebase.auth().onAuthStateChanged(user => {
-      this.setState({
-        Loading: false,
-        user
-      });
+      console.log("user.....",user);
+      this.setState(()=>{
+        return{
+          Loading: false,
+          CurrentUser:user
+        }
+      }, ()=>console.log("user setted..."));
     });
   }  
 
   _currentUser = CurrentUser => {
+    console.log("_currentUser invoked")
     this.setState(
       {
         CurrentUser: CurrentUser.user._user
@@ -47,10 +51,12 @@ export default class App extends Component {
   };
 
   render() {
+
+    console.log("this.state.currentuser...", this.state.CurrentUser)
     // The application is initialising
     if (this.state.Loading) return <Loader />;
     // The user exists, so they're logged in
-    if (this.state.user)
+    if (this.state.CurrentUser)
       return <Messages CurrentUser={this.state.CurrentUser} />;
     // The user is null, so they're logged out
     return <Login currentUser={this._currentUser} />;

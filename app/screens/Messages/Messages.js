@@ -114,15 +114,16 @@ export default class Messages extends Component {
       // await GoogleSignin.revokeAccess();
       GoogleSignin.signOut()
         .then(() =>
-          this.setState(
-            {
-              user: null
-            },
-            () => console.log("user signed out. do your job!")
-          )
+          // this.setState(
+          //   {
+          //     user: null
+          //   },
+          //   () => console.log("user signed out. do your job!")
+          // )
+          console.log("user signed out. do your job!")
         )
-        .catch(err => console.error("sum tim wong", err));
-      this.setState({ user: null }); // Remember to remove the user from your app's state as well
+        // .catch(err => console.error("something went wrong", err));
+      // this.setState({ user: null }); // Remember to remove the user from your app's state as well
     } catch (error) {
       console.error(error);
     }
@@ -133,7 +134,7 @@ export default class Messages extends Component {
     console.log("render...", MessageList);
     return (
       <View style={styles.messageContainer}>
-      <StatusBar
+        <StatusBar
           barStyle="light-content"
           backgroundColor={Colors.COLOR_PRIMARY_DARK}
         />
