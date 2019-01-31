@@ -1,4 +1,4 @@
-package com.sktech.mychat;
+package com.sktech.mygroupchat;
 
 import com.facebook.react.ReactActivity;
 import org.devio.rn.splashscreen.SplashScreen; // import this

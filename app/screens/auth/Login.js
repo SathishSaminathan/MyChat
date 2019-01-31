@@ -46,16 +46,16 @@ export default class Login extends Component {
   componentDidMount() {
     var language = DeviceInfo.getDeviceLocale();
 
-    _loadDeviceInfo = async deviceData => {
-      // load the data in 'local storage'.
-      // this value will be used by login and register components.
-      var value = JSON.stringify(deviceData);
-      try {
-        await AsyncStorage.setItem(config.DEVICE_STORAGE_KEY, value);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+    // _loadDeviceInfo = async deviceData => {
+    //   // load the data in 'local storage'.
+    //   // this value will be used by login and register components.
+    //   var value = JSON.stringify(deviceData);
+    //   try {
+    //     await AsyncStorage.setItem(config.DEVICE_STORAGE_KEY, value);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // };
 
     GoogleSignin.hasPlayServices({
       autoResolve: true,
