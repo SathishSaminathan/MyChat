@@ -17,6 +17,7 @@ import firebaseDb from "../../../firebase";
 import Colors from "../../assets/styles/colors";
 import CustomStyles from "../../assets/styles/styles";
 import MessageArea from "./MessageArea";
+import CustomLoader from "../../components/CustomLoader";
 
 const { width, height } = Dimensions.get("window");
 
@@ -153,7 +154,7 @@ export default class Messages extends Component {
           />
         </View>
         <View style={styles.messageListContainer}>
-          <MessageArea MessageList={MessageList} CurrentUser={CurrentUser} />
+          {MessageList.length == 0?<CustomLoader />:<MessageArea MessageList={MessageList} CurrentUser={CurrentUser} />}
         </View>
         <View style={styles.messageButton}>
           <Emoji name="coffee" style={{ fontSize: 40 }} />
