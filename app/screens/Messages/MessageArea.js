@@ -1,5 +1,7 @@
 import React, { Component } from "react";
-import { View, Text, ScrollView, StyleSheet, Dimensions } from "react-native";
+import { View, Text, ScrollView, StyleSheet, Dimensions,ImageBackground } from "react-native";
+
+import Images from "../../assets/img/image";
 import Message from "./Message";
 
 const { width, height } = Dimensions.get("window");
@@ -36,7 +38,9 @@ export default class MessageArea extends Component {
           this.scrollView.scrollToEnd({ animated: true });
         }}
       >
+        {/* <ImageBackground  style={{width:width, height: '100%'}}  src={Images.chatBackGround}> */}
         {this.renderMessage()}
+        {/* </ImageBackground> */}
       </ScrollView>
     );
   }
