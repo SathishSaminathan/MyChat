@@ -14,7 +14,7 @@ export default class Loader extends Component {
       <View style={styles.loaderContainer}>
       <StatusBar
           barStyle="light-content"
-          backgroundColor={Colors.COLOR_PRIMARY_DARK}
+          backgroundColor={Colors.COLOR_PRIMARY}
         />
         <Text style={styles.loadingText}>Welcome to MY CHAT</Text>
         <ActivityIndicator

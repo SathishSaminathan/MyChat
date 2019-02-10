@@ -15,6 +15,7 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.wenkesj.voice.VoicePackage; // <-- for react-native-voice
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,7 +38,8 @@ public class MainApplication extends Application implements ReactApplication {
             new RNFirebasePackage(),
             new VectorIconsPackage(),
             new RNFirebaseAuthPackage(), // <-- For auth            
-            new RNFirebaseNotificationsPackage() // <-- Push notification
+            new RNFirebaseNotificationsPackage(), // <-- Push notification
+            new VoicePackage() // <-- for react-native-voice
       );
     }
 

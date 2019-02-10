@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover"
   },
   logoText: {
-    color: "white",
+    color: Colors.COLOR_SECONDARY,
     marginVertical: 10,
     fontSize: 45,
     fontFamily: "vincHand"

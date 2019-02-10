@@ -6,20 +6,28 @@ import {
   StyleSheet,
   TextInput,
   Dimensions,
-  StatusBar
+  StatusBar,
+  ImageBackground
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Emoji from "react-native-emoji";
 import firebase from "react-native-firebase";
 import { GoogleSignin } from "react-native-google-signin";
+import Icon from "react-native-vector-icons/MaterialIcons";
+import Voice from "react-native-voice";
 
 import firebaseDb from "../../../firebase";
 import Colors from "../../assets/styles/colors";
 import CustomStyles from "../../assets/styles/styles";
 import MessageArea from "./MessageArea";
 import CustomLoader from "../../components/CustomLoader";
+import Images from "../../assets/img/image";
 
 const { width, height } = Dimensions.get("window");
+
+const HeaderHeight = height / 13;
+const MessageButtonHeight = HeaderHeight;
+const MessageListAreaHeight = height - 2 * HeaderHeight - 24;
 
 export default class Messages extends Component {
   constructor(props) {
@@ -30,8 +38,51 @@ export default class Messages extends Component {
       CurrentUser: props.CurrentUser,
       Messages: [],
       MessageContent: "",
-      MessageList: []
+      MessageList: [],
+      IsRecording: false,
+      results: []
     };
+    Voice.onSpeechResults = this.onSpeechResults.bind(this);
+  }
+
+  toggleSpeech = () => {
+    let p = new Promise(resolve => {
+      this.setState(
+        {
+          IsRecording: !this.state.IsRecording
+        },
+        () => {
+          console.log(this.state.IsRecording);
+        }
+      );
+      resolve();
+    });
+    p.then(() => {
+      if (this.state.IsRecording) {
+        Voice.start("ta-IN");
+      } else {
+        Voice.stop();
+      }
+    });
+  };
+
+  onSpeechStart = () => {
+    Voice.start("ta-IN");
+  };
+
+  onSpeechEnd = () => {
+    Voice.stop();
+  };
+
+  onSpeechResults(e) {
+    this.setState(
+      {
+        results: e.value,
+        MessageContent: e.value[0],
+        IsRecording: false
+      },
+      () => console.log("results...", this.state.results[0])
+    );
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -113,17 +164,16 @@ export default class Messages extends Component {
     firebase.auth().signOut();
     try {
       // await GoogleSignin.revokeAccess();
-      GoogleSignin.signOut()
-        .then(() =>
-          // this.setState(
-          //   {
-          //     user: null
-          //   },
-          //   () => console.log("user signed out. do your job!")
-          // )
-          console.log("user signed out. do your job!")
-        )
-        // .catch(err => console.error("something went wrong", err));
+      GoogleSignin.signOut().then(() =>
+        // this.setState(
+        //   {
+        //     user: null
+        //   },
+        //   () => console.log("user signed out. do your job!")
+        // )
+        console.log("user signed out. do your job!")
+      );
+      // .catch(err => console.error("something went wrong", err));
       // this.setState({ user: null }); // Remember to remove the user from your app's state as well
     } catch (error) {
       console.error(error);
@@ -131,13 +181,18 @@ export default class Messages extends Component {
   };
 
   render() {
-    const { MessageContent, MessageList, CurrentUser } = this.state;
+    const {
+      MessageContent,
+      MessageList,
+      CurrentUser,
+      IsRecording
+    } = this.state;
     console.log("render...", MessageList);
     return (
       <View style={styles.messageContainer}>
         <StatusBar
           barStyle="light-content"
-          backgroundColor={Colors.COLOR_PRIMARY_DARK}
+          backgroundColor={Colors.COLOR_PRIMARY}
         />
         <View style={styles.headerStyle}>
           <FontAwesome
@@ -153,11 +208,32 @@ export default class Messages extends Component {
             name="sign-out"
           />
         </View>
-        <View style={styles.messageListContainer}>
-          {MessageList.length == 0?<CustomLoader />:<MessageArea MessageList={MessageList} CurrentUser={CurrentUser} />}
-        </View>
+        <ImageBackground
+          style={styles.messageListContainer}
+          source={Images.chatBackGround5}
+        >
+          {MessageList.length == 0 ? (
+            <CustomLoader />
+          ) : (
+            <MessageArea MessageList={MessageList} CurrentUser={CurrentUser} />
+          )}
+        </ImageBackground>
         <View style={styles.messageButton}>
-          <Emoji name="coffee" style={{ fontSize: 40 }} />
+          {/* <Emoji name="coffee" style={{ fontSize: 40 }} /> */}
+          <TouchableOpacity onPress={() => this.toggleSpeech()}>
+            <Icon
+              style={[
+                styles.mikeStyle,
+                IsRecording && {
+                  borderWidth: 1,
+                  borderRadius: 16,
+                  borderColor: Colors.COLOR_PRIMARY,
+                  paddingLeft: 1
+                }
+              ]}
+              name={IsRecording ? "stop" : "settings-voice"}
+            />
+          </TouchableOpacity>
           <TextInput
             ref={input => {
               this.MessageField = input;
@@ -165,10 +241,9 @@ export default class Messages extends Component {
             value={MessageContent}
             returnKeyType="done"
             onChangeText={MessageContent => this.setState({ MessageContent })}
+            selectionColor={Colors.COLOR_PRIMARY}
             style={{
-              // width: "80%"
               flex: 1
-              //   maxWidth:"80%"
             }}
             placeholder="enter message"
           />
@@ -179,13 +254,7 @@ export default class Messages extends Component {
             style={styles.sendButton}
             onPress={this.handleSendMessage}
           >
-            <FontAwesome
-              style={{
-                fontSize: 28,
-                color: "white"
-              }}
-              name="angle-right"
-            />
+            <FontAwesome style={styles.sendIcon} name="telegram" />
           </TouchableOpacity>
         </View>
       </View>
@@ -198,7 +267,10 @@ const styles = StyleSheet.create({
     flex: 1
   },
   messageListContainer: {
-    height: height - height / 5
+    // height: height - height / 5
+    height: MessageListAreaHeight,
+    width: width,
+    backgroundColor: "black"
   },
   messageButton: {
     elevation: 10,
@@ -206,29 +278,40 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.WHITE_COLOR,
     position: "absolute",
     bottom: 0,
-    height: height / 12,
+    height: MessageButtonHeight,
+    // height: height / 12,
     borderTopWidth: 1,
     borderTopColor: Colors.COLOR_PRIMARY,
-    flex: 1,
+    // flex: 1,
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: "center",
+    paddingLeft: 5
     // justifyContent: 'space-around',
   },
   sendButton: {
-    backgroundColor: Colors.COLOR_PRIMARY,
+    // backgroundColor: Colors.COLOR_PRIMARY,
     height: height / 12,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",
     width: width / 6
   },
+  sendIcon: {
+    fontSize: 35,
+    color: Colors.COLOR_PRIMARY
+  },
   headerStyle: {
     width: width,
-    height: height / 12,
+    height: HeaderHeight,
     backgroundColor: Colors.COLOR_PRIMARY,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 10
+  },
+  mikeStyle: {
+    fontSize: 30,
+    color: Colors.COLOR_PRIMARY
+    // borderWidth: 1,
   }
 });

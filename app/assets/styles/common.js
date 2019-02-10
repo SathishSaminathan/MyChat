@@ -15,7 +15,7 @@ export const BORDER_RADIUS = 5;
 export const XXLARGE = 60;
 export const XLARGE = 40;
 export const LARGE = 30;
-export const MEDIUM = 24;
+export const MEDIUM = 20;
 export const SMALL = 12;
 
 export default { 
