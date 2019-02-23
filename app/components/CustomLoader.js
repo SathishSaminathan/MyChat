@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Dimensions
 } from "react-native";
+import * as Animatable from "react-native-animatable";
 
 import Colors from "../assets/styles/colors";
 
@@ -19,26 +20,38 @@ export default class CustomLoader extends PureComponent {
 
   render() {
     return (
-      <View style={styles.leaderArea}>
-        <ActivityIndicator color={Colors.WHITE_COLOR} />
-        <Text style={styles.textStyle}>Loading</Text>
-      </View>
+      <Animatable.View
+        style={styles.leaderArea}
+        // animation="rubberBand"
+        // iterationCount="infinite"
+      >
+        <ActivityIndicator color={Colors.WHITE_COLOR} size="small" />
+        <Text style={{
+          fontSize:10,
+          position:'absolute',
+          left:11,
+          color:Colors.COLOR_SECONDARY
+        }}>M</Text>
+      </Animatable.View>
+      /* <Text style={styles.textStyle}>Loading</Text> */
     );
   }
 }
 
 const styles = StyleSheet.create({
   leaderArea: {
+    position:'relative',
     alignSelf: "center",
     top: 10,
-    width: width / 3,
+    // width: width / 3,
     backgroundColor: Colors.COLOR_PRIMARY,
     // flex:1,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",
-    height: 40,
-    borderRadius: 20
+    // height: 40,
+    borderRadius: 20,
+    padding: 5
   },
   textStyle: {
     color: Colors.WHITE_COLOR,

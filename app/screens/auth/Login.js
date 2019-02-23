@@ -17,6 +17,7 @@ import {
 } from "react-native-google-signin";
 import firebase from "react-native-firebase";
 import DeviceInfo from "react-native-device-info";
+import * as Animatable from "react-native-animatable";
 
 import firebaseDb from "../../../firebase";
 import images from "../../assets/img/image";
@@ -130,12 +131,17 @@ export default class Login extends Component {
           style={styles.buttonContainer}
           onPress={this.handleLogin}
         >
-          <View style={styles.buttonTextArea}>
-            <FontAwesome style={styles.buttonText} name="google-plus" />
-            <Text style={[styles.buttonText, { fontSize: 18 }]}>
+          <Animatable.View
+            animation="wobble"
+            iterationCount="infinite"
+            style={styles.buttonTextArea}
+          >
+            {/* <FontAwesome style={styles.buttonText} name="hand-o-right" /> */}
+            <FontAwesome style={styles.buttonText} name="hand-o-right" />
+            {/* <Text style={[styles.buttonText, { fontSize: 18 }]}>
               Login with Gmail
-            </Text>
-          </View>
+            </Text> */}
+          </Animatable.View>
         </TouchableOpacity>
         {/* <GoogleSigninButton
           style={{ width: 48, height: 48 }}
@@ -175,20 +181,21 @@ const styles = StyleSheet.create({
     fontFamily: "vincHand"
   },
   buttonContainer: {
-    width: "90%",
+    // width: "90%",
     backgroundColor: Colors.COLOR_PRIMARY,
-    height: height / 12,
-    borderRadius: 25,
+    // height: height / 12,
+    padding: 10,
+    borderRadius: 40,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around"
   },
   buttonTextArea: {
-    flexDirection: "row",
+    // flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-evenly",
-    flex: 1,
-    paddingHorizontal: 30
+    justifyContent: "space-evenly"
+    // flex: 0,
+    // paddingHorizontal: 30
   },
-  buttonText: { color: "white", fontSize: 24, fontFamily: "Roboto" }
+  buttonText: { color: "white", fontSize: 40, fontFamily: "Roboto" }
 });
