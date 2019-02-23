@@ -15,6 +15,7 @@ import firebase from "react-native-firebase";
 import { GoogleSignin } from "react-native-google-signin";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Voice from "react-native-voice";
+import * as Animatable from "react-native-animatable";
 
 import firebaseDb from "../../../firebase";
 import Colors from "../../assets/styles/colors";
@@ -221,18 +222,31 @@ export default class Messages extends Component {
         <View style={styles.messageButton}>
           {/* <Emoji name="coffee" style={{ fontSize: 40 }} /> */}
           <TouchableOpacity onPress={() => this.toggleSpeech()}>
-            <Icon
-              style={[
-                styles.mikeStyle,
-                IsRecording && {
-                  borderWidth: 1,
-                  borderRadius: 16,
-                  borderColor: Colors.COLOR_PRIMARY,
-                  paddingLeft: 1
-                }
-              ]}
-              name={IsRecording ? "stop" : "settings-voice"}
-            />
+            {IsRecording ? (
+              <Animatable.Text animation="rotate" iterationCount="infinite">
+                <Icon
+                  style={[
+                    styles.mikeStyle,
+                    {
+                      borderWidth: 1,
+                      borderRadius: 16,
+                      paddingLeft: 1,
+                      fontSize: 25
+                    }
+                  ]}
+                  name="stop"
+                />
+              </Animatable.Text>
+            ) : (
+              <Text>
+                <Icon
+                  style={[
+                    styles.mikeStyle,
+                  ]}
+                  name="settings-voice"
+                />
+              </Text>
+            )}
           </TouchableOpacity>
           <TextInput
             ref={input => {
